@@ -1,4 +1,4 @@
-﻿using AlgeriaConfirmedFlight.Model;
+﻿using AlgeriaConfirmedFlight.Shared.Model;
 
 namespace AlgeriaConfirmedFlight.API.Repository
 {

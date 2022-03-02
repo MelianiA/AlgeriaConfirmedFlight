@@ -1,4 +1,4 @@
-﻿using AlgeriaConfirmedFlight.Model;
+﻿using AlgeriaConfirmedFlight.Shared.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlgeriaConfirmedFlight.API.Model

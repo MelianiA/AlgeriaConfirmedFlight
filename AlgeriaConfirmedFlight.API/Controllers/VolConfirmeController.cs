@@ -1,7 +1,5 @@
 ﻿using AlgeriaConfirmedFlight.API.Repository;
-using AlgeriaConfirmedFlight.API.ViewModel;
-using AlgeriaConfirmedFlight.Model;
-using Microsoft.AspNetCore.Http;
+using AlgeriaConfirmedFlight.Shared.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlgeriaConfirmedFlight.API.Controllers

@@ -22,7 +22,7 @@ namespace AlgeriaConfirmedFlight.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("AlgeriaConfirmedFlight.Model.Compagnie", b =>
+            modelBuilder.Entity("AlgeriaConfirmedFlight.Shared.Model.Compagnie", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace AlgeriaConfirmedFlight.API.Migrations
                     b.ToTable("Compagnie");
                 });
 
-            modelBuilder.Entity("AlgeriaConfirmedFlight.Model.VolComfirme", b =>
+            modelBuilder.Entity("AlgeriaConfirmedFlight.Shared.Model.VolComfirme", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
