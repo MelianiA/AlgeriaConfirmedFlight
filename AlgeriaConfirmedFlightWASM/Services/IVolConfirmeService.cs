@@ -1,7 +1,11 @@
-﻿namespace AlgeriaConfirmedFlightWASM.Services
+﻿using AlgeriaConfirmedFlight.Shared.Model;
+using AlgeriaConfirmedFlight.Shared.ViewModel;
+
+namespace AlgeriaConfirmedFlightWASM.Services
 {
     public interface IVolConfirmeService
     {
-        //List<> Heroes { get; set; }
+        Task<List<VolComfirme>> GetAllVols();
+        Task<List<Compagnie>> GetAllCompagnies();
     }
 }

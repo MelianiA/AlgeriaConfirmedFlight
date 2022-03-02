@@ -21,26 +21,31 @@ namespace AlgeriaConfirmedFlight.API.Repository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<VolConfirmeViewModel> GetAllVolConfirmes()
+        public IEnumerable<VolComfirme> GetAllVolConfirmes()
         {
             try
             {
-                var vols = db.VolComfirme.Select(x=> new VolConfirmeViewModel
+                var vols = db.VolComfirme.Select(x => new VolComfirme
                 {
-                    Id= x.Id,
-                    Compagnie = db.Compagnie.SingleOrDefault(c=> c.Id == x.Compagnie),
+                    Id = x.Id,
+                    Compagnie = x.Compagnie,
                     DateFin = x.DateFin,
                     JourDeVol = x.JourDeVol,
                     VilleArrivee = x.VilleArrivee,
                     VilleDepart = x.VilleDepart
-                } ) ;
-              
-                return vols; 
+                });
+
+                return vols;
             }
             catch (Exception ex)
             {
                 return null;
             }
+        }
+
+        public IEnumerable<Compagnie> GetCompagnies()
+        {
+            return db.Compagnie;
         }
 
         public Task<VolComfirme> UpdateVolConfirme(Guid volId, VolComfirme volComfirme)
