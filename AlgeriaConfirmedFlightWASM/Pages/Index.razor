@@ -2,6 +2,7 @@
 
 
 @inject IVolConfirmeService volConfirmeService
+@inject NavigationManager NavigationManager
 @inject HttpClient client
 
 <PageTitle>Index</PageTitle>
@@ -10,18 +11,22 @@
 
 Bienvenu dans notre application.
 
-<MudDataGrid MultiSelection="true" Items="@Elements" Sortable="true" Filterable="true" QuickFilter="@_quickFilter">
+<MudDataGrid MultiSelection="true" Items="@Elements" Sortable="true"
+             Filterable="true" QuickFilter="@_quickFilter">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Liste des vols confirmés</MudText>
         <MudSpacer />
-        <MudTextField @bind-Value="_searchString" Placeholder="Chercher" Adornment="Adornment.Start" Immediate="true"
-            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudTextField @bind-Value="_searchString" Placeholder="Chercher"
+                      Adornment="Adornment.Start" Immediate="true"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium" Class="mt-0">
+        </MudTextField>
     </ToolBarContent>
     <Columns>
-        <Column T="VolConfirmeViewModel" Field="Compagnie"> </Column>
+        <Column T="VolConfirmeViewModel" Field="Compagnie" Filterable="true"> </Column>
         <Column T="VolConfirmeViewModel" Field="VilleDepart" />
         <Column T="VolConfirmeViewModel" Field="VilleArrivee" />
-        <Column T="VolConfirmeViewModel" Field="JourDeVol" />
+        <Column T="VolConfirmeViewModel" Field="JourDeVol" Filterable="true" />
     </Columns>
     <PagerContent>
         <MudDataGridPager T="VolConfirmeViewModel" />
@@ -31,30 +36,33 @@ Bienvenu dans notre application.
 <div class="d-flex flex-wrap mt-4">
     <MudSwitch @bind-Checked="@_sortNameByLength" Color="Color.Primary">Sort Name Column By Length</MudSwitch>
 </div>
+<div @onclick="AjouterVol" class="btn btn-dark">Ajouter un vol </div>
 
 @code {
     private List<VolConfirmeViewModel> Elements = new List<VolConfirmeViewModel>();
     private string _searchString;
     private bool _sortNameByLength;
     // custom sort by name length
-    //private Func<VolConfirmeViewModel, object> _sortBy => x =>
-    //{
-    //    if (_sortNameByLength)
-    //        return x.Compagnie.Name.Length;
-    //    else
-    //        return x.Compagnie.Name;
-    //};
+    private Func<VolConfirmeViewModel, object> _sortBy => x =>
+    {
+        if (_sortNameByLength)
+            return x.Compagnie.Length;
+        else
+            return x.Compagnie;
+    };
 
     // quick filter - filter gobally across multiple columns with the same input
     private Func<VolConfirmeViewModel, bool> _quickFilter => x =>
     {
         if (string.IsNullOrWhiteSpace(_searchString))
             return true;
+        if (x.JourDeVol.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
 
-    //if (x.Compagnie.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-    //    return true;
+        if (x.Compagnie.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
 
-    if ($"{x.VilleDepart} {x.VilleArrivee}".Contains(_searchString))
+        if (x.VilleDepart.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
         return false;
@@ -65,15 +73,24 @@ Bienvenu dans notre application.
         var volsBase = await volConfirmeService.GetAllVols();
         var cmpsBase = await volConfirmeService.GetAllCompagnies();
 
+        if (cmpsBase == null || volsBase == null)
+        {
+            return;
+        }
         Elements = volsBase.Select(x => new VolConfirmeViewModel
             {
                 Id = x.Id,
                 Compagnie = cmpsBase.SingleOrDefault(c => c.Id == x.Compagnie).Name,
                 DateFin = x.DateFin,
-                JourDeVol = x.JourDeVol, 
+                JourDeVol = x.JourDeVol,
                 VilleArrivee = x.VilleArrivee,
-                VilleDepart=x.VilleDepart
+                VilleDepart = x.VilleDepart
             }).ToList();
+    }
+
+    public void AjouterVol()
+    {
+        NavigationManager.NavigateTo("AjouterVol");
     }
 
 }
