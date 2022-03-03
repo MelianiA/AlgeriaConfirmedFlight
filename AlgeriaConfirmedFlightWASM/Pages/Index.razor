@@ -49,6 +49,8 @@ else
 
 @code {
     private List<VolConfirmeViewModel> Elements = new List<VolConfirmeViewModel>();
+    public List<VolComfirme> VolsBase { get; set; } = new List<VolComfirme>();
+    public List<Compagnie> CmpsBase { get; set; } = new List<Compagnie>();
     private string _searchString;
     private bool _sortNameByLength;
     // custom sort by name length
@@ -79,17 +81,24 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var volsBase = await volConfirmeService.GetAllVols();
-        var cmpsBase = await volConfirmeService.GetAllCompagnies();
+        try
+        {
+            VolsBase = await volConfirmeService.GetAllVols();
+            CmpsBase = await volConfirmeService.GetAllCompagnies();
+        }
+        catch (Exception ex)
+        {
 
-        if (cmpsBase == null || volsBase == null)
+        }
+
+        if (VolsBase.Count() == 0 || CmpsBase.Count() == 0)
         {
             return;
         }
-        Elements = volsBase.Select(x => new VolConfirmeViewModel
+        Elements = VolsBase.Select(x => new VolConfirmeViewModel
             {
                 Id = x.Id,
-                Compagnie = cmpsBase.SingleOrDefault(c => c.Id == x.Compagnie).Name,
+                Compagnie = CmpsBase.SingleOrDefault(c => c.Id == x.Compagnie).Name,
                 DateFin = x.DateFin,
                 JourDeVol = x.JourDeVol,
                 VilleArrivee = x.VilleArrivee,
