@@ -8,6 +8,14 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddMudServices();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    builder.WithOrigins("https://www.iasoft.fr/api/")
+           .AllowAnyMethod()
+           .AllowAnyHeader());
+});
+
 
 builder.Services.AddScoped(sp =>
     new HttpClient
