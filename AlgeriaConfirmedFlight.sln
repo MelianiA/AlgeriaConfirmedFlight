@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgeriaConfirmedFlightWASM"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgeriaConfirmedFlight.API", "AlgeriaConfirmedFlight.API\AlgeriaConfirmedFlight.API.csproj", "{952B282E-F0CE-4E7A-8A8E-654744A6281F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgeriaConfirmedFlight.Shared", "AlgeriaConfirmedFlight.Shared\AlgeriaConfirmedFlight.Shared.csproj", "{3C0F6377-FB3B-4F1A-A615-87BF7A2D5CAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgeriaConfirmedFlight.Shared", "AlgeriaConfirmedFlight.Shared\AlgeriaConfirmedFlight.Shared.csproj", "{3C0F6377-FB3B-4F1A-A615-87BF7A2D5CAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

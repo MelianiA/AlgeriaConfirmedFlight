@@ -11,32 +11,41 @@
 
 Bienvenu dans notre application.
 
-<MudDataGrid MultiSelection="true" Items="@Elements" Sortable="true"
+@if (Elements.Count == 0)
+{
+    <Loader />
+}
+else
+{
+    <MudDataGrid MultiSelection="true" Items="@Elements" Sortable="true"
              Filterable="true" QuickFilter="@_quickFilter">
-    <ToolBarContent>
-        <MudText Typo="Typo.h6">Liste des vols confirmés</MudText>
-        <MudSpacer />
-        <MudTextField @bind-Value="_searchString" Placeholder="Chercher"
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Liste des vols confirmés</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="_searchString" Placeholder="Chercher"
                       Adornment="Adornment.Start" Immediate="true"
                       AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium" Class="mt-0">
-        </MudTextField>
-    </ToolBarContent>
-    <Columns>
-        <Column T="VolConfirmeViewModel" Field="Compagnie" Filterable="true"> </Column>
-        <Column T="VolConfirmeViewModel" Field="VilleDepart" />
-        <Column T="VolConfirmeViewModel" Field="VilleArrivee" />
-        <Column T="VolConfirmeViewModel" Field="JourDeVol" Filterable="true" />
-    </Columns>
-    <PagerContent>
-        <MudDataGridPager T="VolConfirmeViewModel" />
-    </PagerContent>
-</MudDataGrid>
+            </MudTextField>
+        </ToolBarContent>
+        <Columns>
+            <Column T="VolConfirmeViewModel" Field="Compagnie" Filterable="true"> </Column>
+            <Column T="VolConfirmeViewModel" Field="VilleDepart" />
+            <Column T="VolConfirmeViewModel" Field="VilleArrivee" />
+            <Column T="VolConfirmeViewModel" Field="JourDeVol" Filterable="true" />
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="VolConfirmeViewModel" />
+        </PagerContent>
+    </MudDataGrid>
 
-<div class="d-flex flex-wrap mt-4">
-    <MudSwitch @bind-Checked="@_sortNameByLength" Color="Color.Primary">Sort Name Column By Length</MudSwitch>
-</div>
-<div @onclick="AjouterVol" class="btn btn-dark">Ajouter un vol </div>
+    <div class="d-flex flex-wrap mt-4">
+        <MudSwitch @bind-Checked="@_sortNameByLength" Color="Color.Primary">Sort Name Column By Length</MudSwitch>
+    </div>
+    <div @onclick="AjouterVol" class="btn btn-dark">Ajouter un vol </div>
+}
+
+
 
 @code {
     private List<VolConfirmeViewModel> Elements = new List<VolConfirmeViewModel>();
