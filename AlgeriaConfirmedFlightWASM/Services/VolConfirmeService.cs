@@ -15,14 +15,14 @@ namespace AlgeriaConfirmedFlightWASM.Services
 
         public async Task<List<Compagnie>> GetAllCompagnies()
         {
-            return await client.GetFromJsonAsync<List<Compagnie>>(@"VolConfirme/GetCmps");
+            return await client.GetFromJsonAsync<List<Compagnie>>(@"http://www.iasoft.fr/api/VolConfirme/GetCmps");
         }
 
         public async Task<List<VolComfirme>> GetAllVols()
         {
             try
             {
-                return await client.GetFromJsonAsync<List<VolComfirme>>(@"VolConfirme/GetAllVols");
+                return await client.GetFromJsonAsync<List<VolComfirme>>(@"http://www.iasoft.fr/api/VolConfirme/GetAllVols");
             }
             catch (Exception ex)
             {
