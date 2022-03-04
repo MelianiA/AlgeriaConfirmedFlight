@@ -9,6 +9,7 @@
 <h1>Hello !</h1>
 
 Bienvenu dans notre application.
+<p>Ici vous trouverez des derniers vols confirmés</p>
 
 @if (Elements.Count == 0)
 {
@@ -28,19 +29,18 @@ else
             </MudTextField>
         </ToolBarContent>
         <Columns>
-            <Column T="VolConfirmeViewModel" Field="Compagnie" Filterable="true"/>
-            <Column T="VolConfirmeViewModel" Field="VilleDepart" Filterable="true"/>
-            <Column T="VolConfirmeViewModel" Field="VilleArrivee" Filterable="true"/>
-            <Column T="VolConfirmeViewModel" Field="JourDeVol" Filterable="true" />
+            <Column T="VolConfirmeViewModel" Field="Compagnie" Filterable="true" Title="Compagnie"/>
+            <Column T="VolConfirmeViewModel" Field="VilleDepart" Filterable="true" Title="Ville de départ"/>
+            <Column T="VolConfirmeViewModel" Field="VilleArrivee" Filterable="true" Title="Ville d'arrivée"/>
+            <Column T="VolConfirmeViewModel" Field="JourDeVol" Filterable="true" Title="Jours de Vols"/>
+            <Column T="VolConfirmeViewModel" Field="DateFin" Title="Dernier jous de confirmation" Filterable="true"  />
         </Columns>
         <PagerContent>
             <MudDataGridPager T="VolConfirmeViewModel" />
         </PagerContent>
     </MudDataGrid>
 
-    <div class="d-flex flex-wrap mt-4">
-        <MudSwitch @bind-Checked="@_sortNameByLength" Color="Color.Primary">Sort Name Column By Length</MudSwitch>
-    </div>
+    <br/>
     <div @onclick="AjouterVol" class="btn btn-dark">Ajouter un vol </div>
 }
 
@@ -52,6 +52,7 @@ else
     public List<Compagnie> CmpsBase { get; set; } = new List<Compagnie>();
     private string _searchString;
     private bool _sortNameByLength;
+
     // custom sort by name length
     private Func<VolConfirmeViewModel, object> _sortBy => x =>
     {
