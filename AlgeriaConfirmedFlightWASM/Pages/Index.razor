@@ -19,10 +19,11 @@ else
 {
     <MudTable Elevation="25" Items="@Elements" Filter="@_quickFilter" @bind-customer="customer">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Liste des vols confirmés</MudText>
+            @*<div @onclick="AjouterVol" class="btn btn-outline-dark">Ajouter un vol </div>*@
+            <MudButton Variant="Variant.Outlined">Ajouter</MudButton>
             <MudSpacer />
-            <MudTextField @bind-Value="_searchString" Placeholder="Chercher un vol ..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
-                IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudTextField  Class="ml-4" @bind-Value="_searchString" Placeholder="Chercher un vol ..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh>Compagnie</MudTh>
@@ -30,7 +31,6 @@ else
             <MudTh>Ville d'arrivée</MudTh>
             <MudTh>Jours de Vols</MudTh>
             <MudTh>Dernier jous de confirmation</MudTh>
-            <MudTh> <div @onclick="AjouterVol" class="btn btn-outline-dark">Ajouter un vol </div></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Compagnie">@context.Compagnie</MudTd>
@@ -40,7 +40,7 @@ else
             <MudTd DataLabel="DateFin">@context.DateFin.ToString("dd/MM/yyyy")</MudTd>
             <MudTd DataLabel="">
                 <MudFab Color="Color.Success" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
-                <MudFab  Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+                <MudFab Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
             </MudTd>
         </RowTemplate>
     </MudTable>
