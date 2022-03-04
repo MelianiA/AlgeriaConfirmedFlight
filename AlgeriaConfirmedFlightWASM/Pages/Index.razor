@@ -6,7 +6,7 @@
 
 <PageTitle>Liste des vols</PageTitle>
 
-<h1>Hello !</h1>
+<h1>les vols confirmés vers l'Algérie</h1>
 
 Bienvenu dans notre application.
 <p>Ici vous trouverez des derniers vols confirmés</p>
@@ -20,7 +20,7 @@ else
     <MudTable Elevation="25" Items="@Elements" Filter="@_quickFilter" @bind-customer="customer">
         <ToolBarContent>
             @*<div @onclick="AjouterVol" class="btn btn-outline-dark">Ajouter un vol </div>*@
-            <MudButton Variant="Variant.Outlined">Ajouter</MudButton>
+            <MudButton @onclick="AjouterVol" Variant="Variant.Outlined">Ajouter</MudButton>
             <MudSpacer />
             <MudTextField  Class="ml-4" @bind-Value="_searchString" Placeholder="Chercher un vol ..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium"></MudTextField>
@@ -107,11 +107,12 @@ else
                 VilleArrivee = x.VilleArrivee,
                 VilleDepart = x.VilleDepart
             }).ToList();
+                    snackBar.Add("list Saved.", Severity.Error);
     }
 
     public void AjouterVol()
     {
-        NavigationManager.NavigateTo("AjouterVol");
+        NavigationManager.NavigateTo("addorupdate");
     }
 
 }
