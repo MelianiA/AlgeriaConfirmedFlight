@@ -6,7 +6,7 @@
 
 <PageTitle>Liste des vols</PageTitle>
 
-<h1>les vols confirmés vers l'Algérie</h1>
+<h1>Les vols confirmés vers l'Algérie</h1>
 
 Bienvenu dans notre application.
 <p>Ici vous trouverez des derniers vols confirmés</p>
@@ -17,12 +17,12 @@ Bienvenu dans notre application.
 }
 else
 {
-    <MudTable Elevation="25" Items="@Elements" Filter="@_quickFilter" @bind-customer="customer">
+    <MudTable Elevation="25" Items="@Elements" Filter="new Func<VolConfirmeViewModel, bool>(Search)" @bind-customer="customer">
         <ToolBarContent>
             @*<div @onclick="AjouterVol" class="btn btn-outline-dark">Ajouter un vol </div>*@
             <MudButton @onclick="AjouterVol" Variant="Variant.Outlined">Ajouter</MudButton>
             <MudSpacer />
-            <MudTextField  Class="ml-4" @bind-Value="_searchString" Placeholder="Chercher un vol ..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+            <MudTextField Class="ml-4" @bind-Value="searchString" Placeholder="Chercher un vol ..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
@@ -33,11 +33,11 @@ else
             <MudTh>Dernier jous de confirmation</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Compagnie">@context.Compagnie</MudTd>
+            <MudTd DataLabel="Compagnie">@context.Compagnie.Name</MudTd>
             <MudTd DataLabel="LastName">@context.VilleDepart</MudTd>
             <MudTd DataLabel="VilleArrivee">@context.VilleArrivee</MudTd>
             <MudTd DataLabel="JourDeVol">@context.JourDeVol</MudTd>
-            <MudTd DataLabel="DateFin">@context.DateFin.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd DataLabel="DateFin">@context.DateFin.ToString("dd/MMMM/yyyy")</MudTd>
             <MudTd DataLabel="">
                 <MudFab Color="Color.Success" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
                 <MudFab Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
@@ -53,35 +53,22 @@ else
     private List<VolConfirmeViewModel> Elements = new List<VolConfirmeViewModel>();
     public List<VolComfirme> VolsBase { get; set; } = new List<VolComfirme>();
     public List<Compagnie> CmpsBase { get; set; } = new List<Compagnie>();
-    private string _searchString;
-    private bool _sortNameByLength;
+    private string searchString = "";
 
-    // custom sort by name length
-    private Func<VolConfirmeViewModel, object> _sortBy => x =>
+    private bool Search(VolConfirmeViewModel customer)
     {
-        if (_sortNameByLength)
-            return x.Compagnie.Length;
-        else
-            return x.Compagnie;
-    };
-
-    // quick filter - filter gobally across multiple columns with the same input
-    private Func<VolConfirmeViewModel, bool> _quickFilter => x =>
-    {
-        if (string.IsNullOrWhiteSpace(_searchString))
+        if (string.IsNullOrWhiteSpace(searchString)) return true;
+        if (customer.Compagnie.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || customer.DateFin.ToString("dd/MMMM/yyyy").Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || customer.VilleArrivee.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || customer.VilleDepart.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || customer.JourDeVol.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+        )
+        {
             return true;
-        if (x.JourDeVol.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        if (x.Compagnie.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        if (x.VilleDepart.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-
+        }
         return false;
-    };
-
+    }
     protected override async Task OnInitializedAsync()
     {
         try
@@ -101,13 +88,13 @@ else
         Elements = VolsBase.Select(x => new VolConfirmeViewModel
             {
                 Id = x.Id,
-                Compagnie = CmpsBase.SingleOrDefault(c => c.Id == x.Compagnie).Name,
+                Compagnie = CmpsBase.SingleOrDefault(c => c.Id == x.Compagnie),
                 DateFin = x.DateFin,
                 JourDeVol = x.JourDeVol,
                 VilleArrivee = x.VilleArrivee,
                 VilleDepart = x.VilleDepart
             }).ToList();
-                    snackBar.Add("list Saved.", Severity.Error);
+        snackBar.Add("list Saved.", Severity.Error);
     }
 
     public void AjouterVol()
