@@ -10,18 +10,6 @@
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
-        <MudSelect T="Compagnie" Label="Compagnie" @bind-Value="@customer.Compagnie" Required="true">
-            @foreach (var selectItem in StaticsElements.CmpsBase)
-            {
-                <MudSelectItem Value="@selectItem">@selectItem.Name</MudSelectItem>
-            }
-        </MudSelect>
-        <MudDatePicker Orientation="Orientation.Portrait" Label="Dernier jous de confirmation" @bind-Date="customer.DateFin" />
-
-        <MudTextField RequiredError="User name is required!" @bind-Value="customer.VilleDepart" Label="Ville de départe" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
-        <MudTextField @bind-Value="customer.VilleArrivee" Label="Ville d'arrivée" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
-        <MudTextField @bind-Value="customer.JourDeVol" Label="Jours de Vols" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
-
 
         <br />
 
@@ -38,6 +26,21 @@
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
             <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                <MudSelect T="Compagnie" Label="Compagnie" @bind-Value="@customer.Compagnie" Required="true" RequiredError="Email is required!">
+                    @foreach (var selectItem in StaticsElements.CmpsBase)
+                    {
+                        <MudSelectItem Value="@selectItem">@selectItem.Name</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker Orientation="Orientation.Portrait" Label="Dernier jous de confirmation" @bind-Date="customer.DateFin" />
+
+                <MudTextField RequiredError="User name is required!" @bind-Value="customer.VilleDepart" Label="Ville de départe" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                <MudTextField @bind-Value="customer.VilleArrivee" Label="Ville d'arrivée" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                <MudTextField @bind-Value="customer.JourDeVol" Label="Jours de Vols" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+
+
+
+
                 <MudTextField T="string" Label="Username" Required="true" RequiredError="User name is required!" />
                 <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!"
                               Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
