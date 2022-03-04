@@ -1,17 +1,23 @@
 using AlgeriaConfirmedFlight.API.Model;
 using AlgeriaConfirmedFlight.API.Repository;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(
+        CertificateAuthenticationDefaults.AuthenticationScheme)
+        .AddCertificate();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.WithOrigins(@"https://meliania.github.io/AlgeriaConfirmedFlight/",
-                                              @"https://www.iasoft.fr/api/").AllowAnyHeader()
-                                                  .AllowAnyMethod();
+                          builder.AllowAnyOrigin()
+                                  .AllowAnyHeader()
+                                  .AllowAnyMethod();
                       });
 });
 

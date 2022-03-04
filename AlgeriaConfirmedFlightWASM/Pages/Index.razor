@@ -1,11 +1,10 @@
 ﻿@page "/"
-
-
+@page "/index"
 @inject IVolConfirmeService volConfirmeService
 @inject NavigationManager NavigationManager
 @inject HttpClient client
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Liste des vols</PageTitle>
 
 <h1>Hello !</h1>
 
@@ -29,9 +28,9 @@ else
             </MudTextField>
         </ToolBarContent>
         <Columns>
-            <Column T="VolConfirmeViewModel" Field="Compagnie" Filterable="true"> </Column>
-            <Column T="VolConfirmeViewModel" Field="VilleDepart" />
-            <Column T="VolConfirmeViewModel" Field="VilleArrivee" />
+            <Column T="VolConfirmeViewModel" Field="Compagnie" Filterable="true"/>
+            <Column T="VolConfirmeViewModel" Field="VilleDepart" Filterable="true"/>
+            <Column T="VolConfirmeViewModel" Field="VilleArrivee" Filterable="true"/>
             <Column T="VolConfirmeViewModel" Field="JourDeVol" Filterable="true" />
         </Columns>
         <PagerContent>
