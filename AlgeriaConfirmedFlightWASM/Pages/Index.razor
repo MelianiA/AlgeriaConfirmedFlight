@@ -17,36 +17,39 @@ Bienvenu dans notre application.
 }
 else
 {
-    <MudDataGrid MultiSelection="true" Items="@Elements" Sortable="true"
-             Filterable="true" QuickFilter="@_quickFilter">
+    <MudTable Elevation="25" Items="@Elements" Filter="@_quickFilter" @bind-customer="customer">
         <ToolBarContent>
             <MudText Typo="Typo.h6">Liste des vols confirmés</MudText>
             <MudSpacer />
-            <MudTextField @bind-Value="_searchString" Placeholder="Chercher"
-                      Adornment="Adornment.Start" Immediate="true"
-                      AdornmentIcon="@Icons.Material.Filled.Search"
-                      IconSize="Size.Medium" Class="mt-0">
-            </MudTextField>
+            <MudTextField @bind-Value="_searchString" Placeholder="Chercher un vol ..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
-        <Columns>
-            <Column T="VolConfirmeViewModel" Field="Compagnie" Filterable="true" Title="Compagnie"/>
-            <Column T="VolConfirmeViewModel" Field="VilleDepart" Filterable="true" Title="Ville de départ"/>
-            <Column T="VolConfirmeViewModel" Field="VilleArrivee" Filterable="true" Title="Ville d'arrivée"/>
-            <Column T="VolConfirmeViewModel" Field="JourDeVol" Filterable="true" Title="Jours de Vols"/>
-            <Column T="VolConfirmeViewModel" Field="DateFin" Title="Dernier jous de confirmation" Filterable="true"  />
-        </Columns>
-        <PagerContent>
-            <MudDataGridPager T="VolConfirmeViewModel" />
-        </PagerContent>
-    </MudDataGrid>
-
-    <br/>
-    <div @onclick="AjouterVol" class="btn btn-dark">Ajouter un vol </div>
+        <HeaderContent>
+            <MudTh>Compagnie</MudTh>
+            <MudTh>Ville de départe</MudTh>
+            <MudTh>Ville d'arrivée</MudTh>
+            <MudTh>Jours de Vols</MudTh>
+            <MudTh>Dernier jous de confirmation</MudTh>
+            <MudTh> <div @onclick="AjouterVol" class="btn btn-outline-dark">Ajouter un vol </div></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Compagnie">@context.Compagnie</MudTd>
+            <MudTd DataLabel="LastName">@context.VilleDepart</MudTd>
+            <MudTd DataLabel="VilleArrivee">@context.VilleArrivee</MudTd>
+            <MudTd DataLabel="JourDeVol">@context.JourDeVol</MudTd>
+            <MudTd DataLabel="DateFin">@context.DateFin.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd DataLabel="">
+                <MudFab Color="Color.Success" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+                <MudFab  Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
 }
 
 
 
 @code {
+    private VolConfirmeViewModel customer = new VolConfirmeViewModel();
     private List<VolConfirmeViewModel> Elements = new List<VolConfirmeViewModel>();
     public List<VolComfirme> VolsBase { get; set; } = new List<VolComfirme>();
     public List<Compagnie> CmpsBase { get; set; } = new List<Compagnie>();
