@@ -1,8 +1,11 @@
-﻿namespace AlgeriaConfirmedFlightWASM.StaticCode
+﻿using AlgeriaConfirmedFlight.Shared.Model;
+
+namespace AlgeriaConfirmedFlightWASM.StaticCode
 {
-    public class StaticsElements
+    public static class StaticsElements
     {
         public static string CodeSecret { get; set; } = "";
+        public static List<Compagnie> CmpsBase { get; set; } = new List<Compagnie>();
 
         public static bool SecretValide()
         {

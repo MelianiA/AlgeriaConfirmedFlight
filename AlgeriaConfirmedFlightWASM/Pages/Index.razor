@@ -40,7 +40,7 @@ else
             <MudTd DataLabel="LastName">@context.VilleDepart</MudTd>
             <MudTd DataLabel="VilleArrivee">@context.VilleArrivee</MudTd>
             <MudTd DataLabel="JourDeVol">@context.JourDeVol</MudTd>
-            <MudTd DataLabel="DateFin">@context.DateFin.ToString("dd/MMMM/yyyy",CultureInfo.CurrentCulture)</MudTd>
+            <MudTd DataLabel="DateFin">@context.DateFin.Value.ToString("dd/MMMM/yyyy",CultureInfo.CurrentCulture)</MudTd>
             <MudTd DataLabel="">
                 <MudFab @onclick="@(() => ModifierVol(@context.Id))" Color="Color.Success" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
                 <MudFab @onclick="@(() => SupprimerVol(@context.Id))" Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
@@ -55,14 +55,13 @@ else
     private VolConfirmeViewModel customer = new VolConfirmeViewModel();
     private List<VolConfirmeViewModel> Elements = new List<VolConfirmeViewModel>();
     public List<VolComfirme> VolsBase { get; set; } = new List<VolComfirme>();
-    public List<Compagnie> CmpsBase { get; set; } = new List<Compagnie>();
     private string searchString = "";
 
     private bool Search(VolConfirmeViewModel customer)
     {
         if (string.IsNullOrWhiteSpace(searchString)) return true;
         if (customer.Compagnie.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
-            || customer.DateFin.ToString("dd/MMMM/yyyy", CultureInfo.CurrentCulture).Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || customer.DateFin.Value.ToString("dd/MMMM/yyyy", CultureInfo.CurrentCulture).Contains(searchString, StringComparison.OrdinalIgnoreCase)
             || customer.VilleArrivee.Contains(searchString, StringComparison.OrdinalIgnoreCase)
             || customer.VilleDepart.Contains(searchString, StringComparison.OrdinalIgnoreCase)
             || customer.JourDeVol.Contains(searchString, StringComparison.OrdinalIgnoreCase)
@@ -78,21 +77,21 @@ else
         try
         {
             VolsBase = await volConfirmeService.GetAllVols();
-            CmpsBase = await volConfirmeService.GetAllCompagnies();
+            StaticsElements.CmpsBase = await volConfirmeService.GetAllCompagnies();
         }
         catch (Exception ex)
         {
 
         }
 
-        if (VolsBase.Count() == 0 || CmpsBase.Count() == 0)
+        if (VolsBase.Count() == 0 || StaticsElements.CmpsBase.Count() == 0)
         {
             return;
         }
         Elements = VolsBase.Select(x => new VolConfirmeViewModel
             {
                 Id = x.Id,
-                Compagnie = CmpsBase.SingleOrDefault(c => c.Id == x.Compagnie),
+                Compagnie = StaticsElements.CmpsBase.SingleOrDefault(c => c.Id == x.Compagnie),
                 DateFin = x.DateFin,
                 JourDeVol = x.JourDeVol,
                 VilleArrivee = x.VilleArrivee,

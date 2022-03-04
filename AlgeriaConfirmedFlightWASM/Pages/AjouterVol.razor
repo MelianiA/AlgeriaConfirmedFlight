@@ -9,11 +9,19 @@
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
-        <MudTextField @bind-Value="customer.Compagnie" Label="Compagnie" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <MudSelect T="Compagnie" Label="Compagnie" @bind-Value="@customer.Compagnie" Required="true">
+            @foreach (var selectItem in StaticsElements.CmpsBase)
+            {
+                <MudSelectItem Value="@selectItem">@selectItem.Name</MudSelectItem>
+            }
+        </MudSelect>
+
         <MudTextField @bind-Value="customer.VilleDepart" Label="Ville de départe" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
         <MudTextField @bind-Value="customer.VilleArrivee" Label="Ville d'arrivée" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
         <MudTextField @bind-Value="customer.JourDeVol" Label="Jours de Vols" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
-        <MudTextField @bind-Value="customer.DateFin" Label="Dernier jous de confirmation" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+
+        <MudDatePicker Label="Dernier jous de confirmation" @bind-Date="customer.DateFin"/>
+
         <br />
 
         <div class="align-content-center btn-group">
@@ -32,7 +40,7 @@
 
     protected override void OnInitialized()
     {
-
+        customer.DateFin = DateTime.Now;
         base.OnInitialized();
     }
 

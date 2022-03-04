@@ -13,7 +13,7 @@ namespace AlgeriaConfirmedFlight.Shared.ViewModel
         public Compagnie Compagnie { get; set; }
         public string VilleDepart { get; set; }
         public string VilleArrivee { get; set; }
-        public DateTime DateFin { get; set; }
+        public DateTime? DateFin { get; set; }
         public string JourDeVol { get; set; }
     }
 }
