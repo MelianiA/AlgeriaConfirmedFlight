@@ -1,5 +1,6 @@
 ﻿@page "/"
 @page "/index"
+@using System.Globalization
 @inject IVolConfirmeService volConfirmeService
 @inject NavigationManager NavigationManager
 @inject HttpClient client
@@ -37,7 +38,7 @@ else
             <MudTd DataLabel="LastName">@context.VilleDepart</MudTd>
             <MudTd DataLabel="VilleArrivee">@context.VilleArrivee</MudTd>
             <MudTd DataLabel="JourDeVol">@context.JourDeVol</MudTd>
-            <MudTd DataLabel="DateFin">@context.DateFin.ToString("dd/MMMM/yyyy")</MudTd>
+            <MudTd DataLabel="DateFin">@context.DateFin.ToString("dd/MMMM/yyyy",CultureInfo.CurrentCulture)</MudTd>
             <MudTd DataLabel="">
                 <MudFab Color="Color.Success" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
                 <MudFab Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
@@ -59,7 +60,7 @@ else
     {
         if (string.IsNullOrWhiteSpace(searchString)) return true;
         if (customer.Compagnie.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
-            || customer.DateFin.ToString("dd/MMMM/yyyy").Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || customer.DateFin.ToString("dd/MMMM/yyyy",CultureInfo.CurrentCulture).Contains(searchString, StringComparison.OrdinalIgnoreCase)
             || customer.VilleArrivee.Contains(searchString, StringComparison.OrdinalIgnoreCase)
             || customer.VilleDepart.Contains(searchString, StringComparison.OrdinalIgnoreCase)
             || customer.JourDeVol.Contains(searchString, StringComparison.OrdinalIgnoreCase)
