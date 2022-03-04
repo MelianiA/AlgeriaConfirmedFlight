@@ -1,5 +1,6 @@
 ﻿@page "/addorupdate"
 @inject NavigationManager NavigationManager
+@inherits StaticsElements
 
 
 <MudCard Elevation="25">
@@ -15,19 +16,19 @@
                 <MudSelectItem Value="@selectItem">@selectItem.Name</MudSelectItem>
             }
         </MudSelect>
+        <MudDatePicker Orientation="Orientation.Portrait" Label="Dernier jous de confirmation" @bind-Date="customer.DateFin"/>
 
-        <MudTextField @bind-Value="customer.VilleDepart" Label="Ville de départe" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <MudTextField RequiredError="User name is required!" @bind-Value="customer.VilleDepart" Label="Ville de départe" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
         <MudTextField @bind-Value="customer.VilleArrivee" Label="Ville d'arrivée" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
         <MudTextField @bind-Value="customer.JourDeVol" Label="Jours de Vols" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
 
-        <MudDatePicker Label="Dernier jous de confirmation" @bind-Date="customer.DateFin"/>
 
         <br />
 
         <div class="align-content-center btn-group">
 
             <MudButton Variant="Variant.Filled" Color="Color.Error" @onclick="@(() => NavigationManager.NavigateTo("index"))">Annuler</MudButton>
-            <MudButton Class="ml-1" Variant="Variant.Filled" Color="Color.Success" @onclick="@(() => NavigationManager.NavigateTo("index"))">Valider</MudButton>
+            <MudButton Class="ml-1" Variant="Variant.Filled" Color="Color.Success" @onclick="Valider">Valider</MudButton>
         </div>
 
     </MudCardContent>
@@ -44,4 +45,8 @@
         base.OnInitialized();
     }
 
+    public void Valider()
+    {
+        
+    }
 }
