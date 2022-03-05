@@ -12,7 +12,7 @@ namespace AlgeriaConfirmedFlightWASM.StaticCode
 
         public static bool SecretValide()
         {
-            return CodeSecret.Equals("123vivabladi", StringComparison.OrdinalIgnoreCase);
+            return CodeSecret.Equals("123vivaDz", StringComparison.OrdinalIgnoreCase);
         }
 
 
