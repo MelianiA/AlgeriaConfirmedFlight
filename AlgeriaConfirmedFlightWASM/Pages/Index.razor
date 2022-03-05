@@ -13,7 +13,8 @@
 <h1>Les vols confirmés vers l'Algérie</h1>
 <b>Les données de cette page sont mets à jour régulièrement.</b>
 <p>Le site est toujours en phase d'amélioration</p>
-<p>si vous souhaitez modifier ces informations, vous devez renseigner votre code secret <a class="bg-warning" href="/secret">ici</a></p>
+<p>si vous souhaitez modifier ces informations, vous devez renseigner votre code secret <a class="bg-warning" 
+        @onclick="@(() => NavigationManager.NavigateTo("/secret"))" >ici</a></p>
 
 @if (Elements == null)
 {
