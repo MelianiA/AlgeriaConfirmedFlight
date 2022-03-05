@@ -38,10 +38,10 @@ else
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Compagnie">@context.Compagnie.Name</MudTd>
-            <MudTd DataLabel="LastName">@context.VilleDepart</MudTd>
-            <MudTd DataLabel="VilleArrivee">@context.VilleArrivee</MudTd>
-            <MudTd DataLabel="JourDeVol">@context.JourDeVol</MudTd>
-            <MudTd DataLabel="DateFin">@context.DateFin.Value.ToString("dd/MMMM/yyyy",new CultureInfo("fr-FR"))</MudTd>
+            <MudTd DataLabel="Ville de départe">@context.VilleDepart</MudTd>
+            <MudTd DataLabel="Ville d'arrivée">@context.VilleArrivee</MudTd>
+            <MudTd DataLabel="Jours de Vols">@context.JourDeVol</MudTd>
+            <MudTd DataLabel="Dernier jous de confirmation">@context.DateFin.Value.ToString("dd/MMMM/yyyy",new CultureInfo("fr-FR"))</MudTd>
             <MudTd DataLabel="">
                 <MudFab @onclick="@(() => ModifierVol(@context.Id))" Color="Color.Success" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
                 <MudFab @onclick="@(() => SupprimerVol(@context.Id))" Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
