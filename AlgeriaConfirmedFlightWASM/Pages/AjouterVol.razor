@@ -3,6 +3,7 @@
 @inject NavigationManager NavigationManager
 @using System.ComponentModel.DataAnnotations
 @using System.Text.RegularExpressions
+@using System.Globalization
 @inject IVolConfirmeService volService
 
 <MudGrid>
@@ -20,7 +21,7 @@
                 </MudSelect>
                 <MudDatePicker Orientation="Orientation.Portrait" Label="Dernier jous de confirmation"
                                Required="true" RequiredError="Le champs Dernier jous de confirmation est obligatoire!"
-                               @bind-Date="VolConfirmeVM.DateFin" />
+                               Culture="@(new CultureInfo("fr-FR"))" @bind-Date="VolConfirmeVM.DateFin" />
 
                 <MudTextField RequiredError="Le champs Ville de départe est obligatoire!" @bind-Value="VolConfirmeVM.VilleDepart"
                               Required="true" Label="Ville de départe" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>

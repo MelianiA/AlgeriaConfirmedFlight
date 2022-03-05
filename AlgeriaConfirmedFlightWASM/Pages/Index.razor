@@ -13,7 +13,7 @@
 <h1>Les vols confirmés vers l'Algérie</h1>
 <b>Les données de cette page sont mets à jour régulièrement.</b>
 <p>Le site est toujours en phase d'amélioration</p>
-<p>si vous souhaitez modifier ces informations, vous devez renseigner votre code secret <a class="bg-warning" 
+<p>Si vous souhaitez modifier ces informations, vous devez renseigner votre code secret <a class="bg-warning" 
         @onclick="@(() => NavigationManager.NavigateTo("secret"))" >ici</a></p>
 
 @if (Elements == null)
@@ -41,7 +41,7 @@ else
             <MudTd DataLabel="LastName">@context.VilleDepart</MudTd>
             <MudTd DataLabel="VilleArrivee">@context.VilleArrivee</MudTd>
             <MudTd DataLabel="JourDeVol">@context.JourDeVol</MudTd>
-            <MudTd DataLabel="DateFin">@context.DateFin.Value.ToString("dd/MMMM/yyyy",CultureInfo.CurrentCulture)</MudTd>
+            <MudTd DataLabel="DateFin">@context.DateFin.Value.ToString("dd/MMMM/yyyy",new CultureInfo("fr-FR"))</MudTd>
             <MudTd DataLabel="">
                 <MudFab @onclick="@(() => ModifierVol(@context.Id))" Color="Color.Success" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
                 <MudFab @onclick="@(() => SupprimerVol(@context.Id))" Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
@@ -64,7 +64,7 @@ else
     {
         if (string.IsNullOrWhiteSpace(searchString)) return true;
         if (customer.Compagnie.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
-            || customer.DateFin.Value.ToString("dd/MMMM/yyyy", CultureInfo.CurrentCulture).Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || customer.DateFin.Value.ToString("dd/MMMM/yyyy", new CultureInfo("fr-FR")).Contains(searchString, StringComparison.OrdinalIgnoreCase)
             || customer.VilleArrivee.Contains(searchString, StringComparison.OrdinalIgnoreCase)
             || customer.VilleDepart.Contains(searchString, StringComparison.OrdinalIgnoreCase)
             || customer.JourDeVol.Contains(searchString, StringComparison.OrdinalIgnoreCase)
