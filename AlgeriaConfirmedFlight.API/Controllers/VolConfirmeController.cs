@@ -30,5 +30,50 @@ namespace AlgeriaConfirmedFlight.API.Controllers
             return volConfirmeRepository.GetCompagnies().ToList();
         }
 
+        [HttpPost]
+        [Route("createvol")]
+        public Guid? CreateVol(VolComfirme vol)
+        {
+            var ok = volConfirmeRepository.CreateVolConfirme(vol);
+            if (ok.Result)
+            {
+                return vol.Id;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [Route("UpdateVol")]
+        public Guid? UpdateVol(VolComfirme vol)
+        {
+            var ok = volConfirmeRepository.UpdateVolConfirme(vol);
+            if (ok.Result)
+            {
+                return vol.Id;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [Route("SupprimeVol")]
+        public Guid? SupprimeVol([FromBody] Guid volId)
+        {
+            var ok = volConfirmeRepository.DeleteVolConfirme(volId);
+            if (ok.Result)
+            {
+                return volId;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }

@@ -7,10 +7,12 @@ namespace AlgeriaConfirmedFlightWASM.StaticCode
     {
         public static string CodeSecret { get; set; } = "";
         public static List<Compagnie> CmpsBase { get; set; } = new List<Compagnie>();
+        public static List<VolComfirme> VolsBase { get; set; } = new List<VolComfirme>();
+
 
         public static bool SecretValide()
         {
-            return CodeSecret.Equals("abc", StringComparison.OrdinalIgnoreCase);
+            return CodeSecret.Equals("123vivabladi", StringComparison.OrdinalIgnoreCase);
         }
 
 

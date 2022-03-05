@@ -1,69 +1,41 @@
 ﻿@page "/addorupdate"
+@page "/addorupdate/{IdVol:guid}"
 @inject NavigationManager NavigationManager
 @using System.ComponentModel.DataAnnotations
 @using System.Text.RegularExpressions
-
-<MudCard Elevation="25">
-    <MudCardHeader>
-        <CardHeaderContent>
-            <MudText Typo="Typo.h4">Ajouter un vol</MudText>
-        </CardHeaderContent>
-    </MudCardHeader>
-    <MudCardContent>
-
-        <br />
-
-        <div class="align-content-center btn-group">
-
-            <MudButton Variant="Variant.Filled" Color="Color.Error" @onclick="@(() => NavigationManager.NavigateTo("index"))">Annuler</MudButton>
-            <MudButton Class="ml-1" Variant="Variant.Filled" Color="Color.Success" @onclick="Valider">Valider</MudButton>
-        </div>
-
-    </MudCardContent>
-</MudCard>
+@inject IVolConfirmeService volService
 
 <MudGrid>
     <MudItem xs="12" sm="7">
         <MudPaper Class="pa-4">
             <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
-                <MudSelect T="Compagnie" Label="Compagnie" @bind-Value="@customer.Compagnie" Required="true" RequiredError="Email is required!">
+                <h4>@Titre un vol</h4>
+
+                <MudSelect T="Compagnie" Label="Compagnie" @bind-Value="@VolConfirmeVM.Compagnie"
+                           Required="true" RequiredError="Le champs Compagnie est obligatoire !">
                     @foreach (var selectItem in StaticsElements.CmpsBase)
                     {
                         <MudSelectItem Value="@selectItem">@selectItem.Name</MudSelectItem>
                     }
                 </MudSelect>
-                <MudDatePicker Orientation="Orientation.Portrait" Label="Dernier jous de confirmation" @bind-Date="customer.DateFin" />
+                <MudDatePicker Orientation="Orientation.Portrait" Label="Dernier jous de confirmation"
+                               Required="true" RequiredError="Le champs Dernier jous de confirmation est obligatoire!"
+                               @bind-Date="VolConfirmeVM.DateFin" />
 
-                <MudTextField RequiredError="User name is required!" @bind-Value="customer.VilleDepart" Label="Ville de départe" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
-                <MudTextField @bind-Value="customer.VilleArrivee" Label="Ville d'arrivée" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
-                <MudTextField @bind-Value="customer.JourDeVol" Label="Jours de Vols" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+                <MudTextField RequiredError="Le champs Ville de départe est obligatoire!" @bind-Value="VolConfirmeVM.VilleDepart"
+                              Required="true" Label="Ville de départe" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
 
+                <MudTextField @bind-Value="VolConfirmeVM.VilleArrivee" Label="Ville d'arrivée" Variant="Variant.Text"
+                              Required="true" RequiredError="Le champs Ville d'arrivée est obligatoire!" Margin="Margin.Normal"></MudTextField>
 
-
-
-                <MudTextField T="string" Label="Username" Required="true" RequiredError="User name is required!" />
-                <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!"
-                              Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
-                <MudTextField T="string" Label="Password" HelperText="Choose a strong password" @ref="pwField1"
-                              InputType="InputType.Password"
-                              Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
-                              RequiredError="Password is required!" />
-                <div class="d-flex">
-                    <MudRadioGroup T="string" Required="true" RequiredError="Account type is required!">
-                        <MudRadio Option="@("Personal")">Personal</MudRadio>
-                        <MudRadio Option="@("Professional")">Professional</MudRadio>
-                    </MudRadioGroup>
-                </div>
-                <div class="d-flex align-center justify-space-between mt-6">
-                    <MudCheckBox T="bool" Required="true" RequiredError="You must agree" Class="ml-n2" Label="I agree!" />
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto">Register</MudButton>
-                </div>
+                <MudTextField @bind-Value="VolConfirmeVM.JourDeVol" Label="Jours de Vols" Variant="Variant.Text"
+                              Required="true" RequiredError="Le champs Jours de Vols est obligatoire!" Margin="Margin.Normal"></MudTextField>
             </MudForm>
         </MudPaper>
         <MudPaper Class="pa-4 mt-4">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" OnClick="@(()=>form.Validate())">Validate</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(()=>form.Reset())" Class="mx-2">Reset</MudButton>
-            <MudButton Variant="Variant.Filled" DisableElevation="true" OnClick="@(()=>form.ResetValidation())">Reset Validation</MudButton>
+            <MudButton Class="ml-1" Variant="Variant.Filled" Color="Color.Success"
+                       @onclick="Valider">Valider</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Error" @onclick="@(() => NavigationManager.NavigateTo("index"))">Annuler</MudButton>
         </MudPaper>
     </MudItem>
 </MudGrid>
@@ -72,38 +44,114 @@
 
 
 @code {
-    private VolConfirmeViewModel customer = new VolConfirmeViewModel();
+    private VolConfirmeViewModel VolConfirmeVM { get; set; }
+    [Parameter] public Guid IdVol { get; set; }
+    public string Titre { get; set; }
+    bool success;
+    string[] errors = { };
+    MudForm form;
 
     protected override void OnInitialized()
     {
-        customer.DateFin = DateTime.Now;
+        if (!StaticsElements.SecretValide())
+        {
+            snackBar.Add("Vous devez saisir le code secret afin de pouvoir effectuer cette opération", Severity.Error);
+            NavigationManager.NavigateTo("addorupdate");
+        }
+        if (IdVol == default)
+        {
+            VolConfirmeVM = new VolConfirmeViewModel();
+            VolConfirmeVM.DateFin = DateTime.Now;
+            Titre = "Ajouter";
+        }
+        else
+        {
+            var vol = StaticsElements.VolsBase.SingleOrDefault(x => x.Id == IdVol);
+            VolConfirmeVM = new VolConfirmeViewModel
+                {
+                    Id = IdVol,
+                    Compagnie = StaticsElements.CmpsBase.SingleOrDefault(c => c.Id == vol.Compagnie),
+                    DateFin = vol.DateFin,
+                    JourDeVol = vol.JourDeVol,
+                    VilleArrivee = vol.VilleArrivee,
+                    VilleDepart = vol.VilleDepart
+                };
+            Titre = "Modifier";
+
+        }
         base.OnInitialized();
     }
 
     public void Valider()
     {
-
-    }
-
-    bool success;
-    string[] errors = { };
-    MudTextField<string> pwField1;
-    MudForm form;
-
-    private IEnumerable<string> PasswordStrength(string pw)
-    {
-        if (string.IsNullOrWhiteSpace(pw))
+        form.Validate();
+        if (IdVol == default)
         {
-            yield return "Password is required!";
-            yield break;
+            Ajouter();
         }
-        if (pw.Length < 8)
-            yield return "Password must be at least of length 8";
-        if (!Regex.IsMatch(pw, @"[A-Z]"))
-            yield return "Password must contain at least one capital letter";
-        if (!Regex.IsMatch(pw, @"[a-z]"))
-            yield return "Password must contain at least one lowercase letter";
-        if (!Regex.IsMatch(pw, @"[0-9]"))
-            yield return "Password must contain at least one digit";
+        else
+        {
+            Modifier();
+        }
+
     }
+
+    public async void Ajouter()
+    {
+        if (success)
+        {
+            VolComfirme vol = new VolComfirme
+                {
+                    Compagnie = VolConfirmeVM.Compagnie.Id,
+                    DateFin = VolConfirmeVM.DateFin,
+                    VilleArrivee = VolConfirmeVM.VilleArrivee,
+                    VilleDepart = VolConfirmeVM.VilleDepart,
+                    JourDeVol = VolConfirmeVM.JourDeVol
+                };
+
+            var res = await volService.AjouterVolConirme(vol);
+            var strinResp = res.Content.ReadAsStringAsync();
+            try
+            {
+                VolConfirmeVM.Id = Guid.Parse(strinResp.Result.Replace("\"", ""));
+                snackBar.Add("L'ajout du vol est réussi", Severity.Success);
+                NavigationManager.NavigateTo("index");
+            }
+            catch (Exception ex)
+            {
+                snackBar.Add("Il y a eu un problème! veuillez recommencer svp", Severity.Warning);
+            }
+        }
+    }
+
+    public async void Modifier()
+    {
+        if (success)
+        {
+            VolComfirme vol = new VolComfirme
+                {
+                    Id = IdVol,
+                    Compagnie = VolConfirmeVM.Compagnie.Id,
+                    DateFin = VolConfirmeVM.DateFin,
+                    VilleArrivee = VolConfirmeVM.VilleArrivee,
+                    VilleDepart = VolConfirmeVM.VilleDepart,
+                    JourDeVol = VolConfirmeVM.JourDeVol
+                };
+            var res = await volService.ModifierVolConirme(vol);
+            var strinResp = res.Content.ReadAsStringAsync();
+            try
+            {
+                VolConfirmeVM.Id = Guid.Parse(strinResp.Result.Replace("\"", ""));
+                snackBar.Add("La modification du vol est réussi", Severity.Success);
+                NavigationManager.NavigateTo("index");
+            }
+            catch (Exception ex)
+            {
+                snackBar.Add("Il y a eu un problème! veuillez recommencer svp", Severity.Warning);
+            }
+        }
+    }
+
+
+
 }

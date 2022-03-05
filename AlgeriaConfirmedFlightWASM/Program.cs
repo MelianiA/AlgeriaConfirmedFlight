@@ -20,6 +20,7 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped(sp =>
     new HttpClient
     {
+        //BaseAddress = new Uri(@"https://localhost:5011")
         BaseAddress = new Uri(@"http://www.iasoft.fr/api/")
     });
 builder.Services.AddScoped<IVolConfirmeService, VolConfirmeService>();

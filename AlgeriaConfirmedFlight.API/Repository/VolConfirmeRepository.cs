@@ -1,6 +1,7 @@
 ﻿using AlgeriaConfirmedFlight.API.Model;
 using AlgeriaConfirmedFlight.Shared.Model;
 using AlgeriaConfirmedFlight.Shared.ViewModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace AlgeriaConfirmedFlight.API.Repository
 {
@@ -11,14 +12,38 @@ namespace AlgeriaConfirmedFlight.API.Repository
         {
             this.db = appDb;
         }
-        public Task<VolComfirme> CreateVolConfirme(VolComfirme volComfirme)
+        public async Task<bool> CreateVolConfirme(VolComfirme volComfirme)
         {
-            throw new NotImplementedException();
+            try
+            {
+                db.Add(volComfirme);
+                await db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
         }
 
-        public Task<int> DeleteVolConfirme(Guid volId)
+        public async Task<bool> DeleteVolConfirme(Guid volId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var vol = db.VolComfirme.SingleOrDefault(v => v.Id == volId);
+                if (vol != null)
+                {
+                    db.VolComfirme.Remove(vol);
+                    db.SaveChanges();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public IEnumerable<VolComfirme> GetAllVolConfirmes()
@@ -48,9 +73,19 @@ namespace AlgeriaConfirmedFlight.API.Repository
             return db.Compagnie;
         }
 
-        public Task<VolComfirme> UpdateVolConfirme(Guid volId, VolComfirme volComfirme)
+        public async Task<bool> UpdateVolConfirme(VolComfirme volComfirme)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var vol = db.VolComfirme.Attach(volComfirme);
+                vol.State = EntityState.Modified;
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

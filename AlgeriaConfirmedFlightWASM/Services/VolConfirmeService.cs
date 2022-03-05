@@ -15,14 +15,14 @@ namespace AlgeriaConfirmedFlightWASM.Services
 
         public async Task<List<Compagnie>> GetAllCompagnies()
         {
-            return await client.GetFromJsonAsync<List<Compagnie>>(@"http://www.iasoft.fr/api/VolConfirme/GetCmps");
+            return await client.GetFromJsonAsync<List<Compagnie>>(@"VolConfirme/GetCmps");
         }
 
         public async Task<List<VolComfirme>> GetAllVols()
         {
             try
             {
-                return await client.GetFromJsonAsync<List<VolComfirme>>(@"http://www.iasoft.fr/api/VolConfirme/GetAllVols");
+                return await client.GetFromJsonAsync<List<VolComfirme>>(@"VolConfirme/GetAllVols");
             }
             catch (Exception ex)
             {
@@ -38,5 +38,22 @@ namespace AlgeriaConfirmedFlightWASM.Services
 
         }
 
+        public async Task<HttpResponseMessage> AjouterVolConirme(VolComfirme vol)
+        {
+            var response = await client.PostAsJsonAsync("VolConfirme/createvol", vol);
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> ModifierVolConirme(VolComfirme vol)
+        {
+            var response = await client.PostAsJsonAsync("VolConfirme/UpdateVol", vol);
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> SupprimerVolConirme(Guid id)
+        {
+            var response = await client.PostAsJsonAsync("VolConfirme/SupprimeVol", id);
+            return response;
+        }
     }
 }

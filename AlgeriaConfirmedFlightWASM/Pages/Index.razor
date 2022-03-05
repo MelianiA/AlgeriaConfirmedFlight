@@ -5,13 +5,15 @@
 @inject NavigationManager NavigationManager
 @inject HttpClient client
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject IVolConfirmeService volService
+
 
 <PageTitle>Liste des vols</PageTitle>
 
 <h1>Les vols confirmés vers l'Algérie</h1>
-
-Les données de cette page sont mets à jours régulierement.
-<p>Ici vous trouverez des derniers vols confirmés</p>
+<b>Les données de cette page sont mets à jour régulièrement.</b>
+<p>Le site est toujours en phase d'amélioration</p>
+<p>si vous souhaitez modifier ces informations, vous devez renseigner votre code secret <a class="bg-warning" href="/secret">ici</a></p>
 
 @if (Elements.Count == 0)
 {
@@ -21,7 +23,6 @@ else
 {
     <MudTable Elevation="25" Items="@Elements" Filter="new Func<VolConfirmeViewModel, bool>(Search)" @bind-customer="customer">
         <ToolBarContent>
-            @*<div @onclick="AjouterVol" class="btn btn-outline-dark">Ajouter un vol </div>*@
             <MudButton @onclick="AjouterVol" Variant="Variant.Outlined">Ajouter</MudButton>
             <MudSpacer />
             <MudTextField Class="ml-4" @bind-Value="searchString" Placeholder="Chercher un vol ..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
@@ -45,6 +46,9 @@ else
                 <MudFab @onclick="@(() => SupprimerVol(@context.Id))" Color="Color.Error" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
             </MudTd>
         </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
     </MudTable>
 }
 
@@ -53,7 +57,6 @@ else
 @code {
     private VolConfirmeViewModel customer = new VolConfirmeViewModel();
     private List<VolConfirmeViewModel> Elements = new List<VolConfirmeViewModel>();
-    public List<VolComfirme> VolsBase { get; set; } = new List<VolComfirme>();
     private string searchString = "";
 
     private bool Search(VolConfirmeViewModel customer)
@@ -73,10 +76,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         var secret = await localStorage.GetItemAsync<string>("myelementCokkies");
-        StaticsElements.CodeSecret = secret != null? secret : ""; 
+        StaticsElements.CodeSecret = secret != null ? secret : "";
         try
         {
-            VolsBase = await volConfirmeService.GetAllVols();
+            StaticsElements.VolsBase = await volConfirmeService.GetAllVols();
             StaticsElements.CmpsBase = await volConfirmeService.GetAllCompagnies();
         }
         catch (Exception ex)
@@ -84,11 +87,11 @@ else
 
         }
 
-        if (VolsBase.Count() == 0 || StaticsElements.CmpsBase.Count() == 0)
+        if (StaticsElements.VolsBase.Count() == 0 || StaticsElements.CmpsBase.Count() == 0)
         {
             return;
         }
-        Elements = VolsBase.Select(x => new VolConfirmeViewModel
+        Elements = StaticsElements.VolsBase.Select(x => new VolConfirmeViewModel
             {
                 Id = x.Id,
                 Compagnie = StaticsElements.CmpsBase.SingleOrDefault(c => c.Id == x.Compagnie),
@@ -117,17 +120,31 @@ else
             snackBar.Add("Vous devez saisir le code secret afin de pouvoir effectuer cette opération", Severity.Error);
             return;
         }
-        NavigationManager.NavigateTo("addorupdate");
+        NavigationManager.NavigateTo($"addorupdate/{id}");
 
     }
 
-    public void SupprimerVol(Guid id)
+    public async void SupprimerVol(Guid id)
     {
         if (!StaticsElements.SecretValide())
         {
             snackBar.Add("Vous devez saisir le code secret afin de pouvoir effectuer cette opération", Severity.Error);
             return;
         }
+
+
+        try
+        {
+            var res = await volService.SupprimerVolConirme(id);
+            Elements.Where(x => x.Id == id).ToList().ForEach(x => Elements.Remove(x));
+            snackBar.Add("La suppression du vol est réussi", Severity.Success);
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            snackBar.Add("Il y a eu un problème! veuillez recommencer svp", Severity.Warning);
+        }
+
     }
 
 }
