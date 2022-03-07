@@ -13,10 +13,12 @@
 <h1>Les vols confirmés vers l'Algérie</h1>
 <b>Les données de cette page sont mets à jour régulièrement.</b>
 <p>Le site est toujours en phase d'amélioration</p>
-<p>Si vous souhaitez modifier ces informations, vous devez renseigner votre code secret <a class="bg-warning" 
-        @onclick="@(() => NavigationManager.NavigateTo("secret"))" >ici</a></p>
+<p>
+    Si vous souhaitez modifier ces informations, vous devez renseigner votre code secret <a class="bg-warning"
+                                                                                            @onclick="@(() => NavigationManager.NavigateTo("secret"))">ici</a>
+</p>
 
-@if (Elements == null)
+@if (loading)
 {
     <Loader />
 }
@@ -59,6 +61,7 @@ else
     private VolConfirmeViewModel customer = new VolConfirmeViewModel();
     private List<VolConfirmeViewModel> Elements = new List<VolConfirmeViewModel>();
     private string searchString = "";
+    private bool loading;
 
     private bool Search(VolConfirmeViewModel customer)
     {
@@ -76,6 +79,7 @@ else
     }
     protected override async Task OnInitializedAsync()
     {
+        loading = true;
         var secret = await localStorage.GetItemAsync<string>("myelementCokkies");
         StaticsElements.CodeSecret = secret != null ? secret : "";
         try
@@ -85,6 +89,7 @@ else
         }
         catch (Exception ex)
         {
+            loading = false;
 
         }
 
@@ -101,7 +106,7 @@ else
                 VilleArrivee = x.VilleArrivee,
                 VilleDepart = x.VilleDepart
             }).ToList();
-        //snackBar.Add("list Saved.", Severity.Error);
+        loading = false;
     }
 
     public void AjouterVol()
